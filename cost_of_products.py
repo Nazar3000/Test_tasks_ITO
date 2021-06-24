@@ -35,7 +35,7 @@ def new_prises(input):
 
         new_dict = {
             key: round(value+(second_tax-first_tax), 2)
-            if key is "price"
+            if key == "price"
             else value for key, value in
                     dict.items()}
 

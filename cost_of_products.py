@@ -20,21 +20,30 @@ input={
 
 def new_prises(input):
 
-    tax = input["tax"]+1
-    margin = input["margin"]+1
-    products_list=[]
+    tax = input["tax"]
+    margin = input["margin"]
+    products_list = []
     total_price = 0
 
     for dict in input["products"]:
-        dict.update({"price": dict["net_cost"]})
-        new_dict = {key: value*margin*tax if key is "price" else value for key, value in
+        net_cost = dict["net_cost"]
+        price = net_cost*(margin+1)*(tax+1)
+        first_tax = net_cost*(margin+1)*tax
+        second_tax = price*tax
+
+        dict.update({"price": price})
+
+        new_dict = {
+            key: round(value+(second_tax-first_tax), 2)
+            if key is "price"
+            else value for key, value in
                     dict.items()}
-        new_dict.pop("title")
+
         total_price += new_dict["price"]
         new_dict.pop("net_cost")
         products_list.append(new_dict)
 
-    output= {"products": products_list, "total_price": total_price }
+    output = {"products": products_list, "total_price": round(total_price, 2)}
 
     print(output)
     return output

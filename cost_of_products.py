@@ -27,14 +27,13 @@ def new_prises(input):
 
     for dict in input["products"]:
         net_cost = dict["net_cost"]
-        price = net_cost*(margin+1)*(tax+1)
-        first_tax = net_cost*(margin+1)*tax
-        second_tax = price*tax
+        price = net_cost/(1-(tax+margin))
+        
 
         dict.update({"price": price})
 
         new_dict = {
-            key: round(value+(second_tax-first_tax), 2)
+            key: value
             if key == "price"
             else value for key, value in
                     dict.items()}
@@ -43,7 +42,7 @@ def new_prises(input):
         new_dict.pop("net_cost")
         products_list.append(new_dict)
 
-    output = {"products": products_list, "total_price": round(total_price, 2)}
+    output = {"products": products_list, "total_price": total_price}
 
     print(output)
     return output
